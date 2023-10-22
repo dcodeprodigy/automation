@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Add Subscriber</title>
+  <style>
+    /* Define your CSS styles here */
+    .popup {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      padding: 20px;
+      border: 2px solid #ccc;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    }
+  </style>
+</head>
+<body>
+  <form onsubmit="submitForm(); return false;" method="post" action="https://script.google.com/macros/s/AKfycbzd4uLiBZvkESKoIPhFgwnz93Uqz0zQgsXv0bafb7Kn4dwBivqTiGwVSkYzrKo0xPcjzw/exec" target="iframe">
+    <input type="email" name="email" id="email" placeholder="Enter your email address" autocomplete="off">
+    <button type="submit" value="Submit">Submit</button>
+  </form>
+  
+  <iframe name="iframe" style="position: absolute; visibility: hidden"></iframe>
+
+
+  <div class="popup" id="popup">
+    <p id="popup-message">Thank you for subscribing!</p>
+    <button onclick="closePopup()">Close</button>
+  </div>
+
+  <script>
+    var popup = document.getElementById("popup");
+    var popupMessage = document.getElementById("popup-message");
+
+    function showPopup(message) {
+      popupMessage.innerText = message;
+      popup.style.display = "block";
+    }
+  
+    function closePopup() {
+      popup.style.display = "none";
+    }
+  
+    function submitForm() {
+      let email = document.getElementById("email").value;
+  
+      google.script.run
+        .withSuccessHandler(function(response) {
+          if (response === 'success') {
+            showPopup();
+          } else {
+            popupMessage.innerText="An error occured"
+            showPopup();
+          }
+        })
+        .addSubscriber(email);
+    }
+  </script>
+  
+</body>
+</html>
